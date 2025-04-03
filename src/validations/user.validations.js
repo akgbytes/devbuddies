@@ -24,9 +24,6 @@ const registerSchema = z.object({
     }),
 });
 
-const validateRegisterData = (userData) => {
-  return registerSchema.safeParse(userData);
-};
 const loginSchema = z.object({
   email: z
     .string()
@@ -43,6 +40,10 @@ const loginSchema = z.object({
         "Password must include at least one uppercase letter, one lowercase letter, one number, and one special character.",
     }),
 });
+
+const validateRegisterData = (userData) => {
+  return registerSchema.safeParse(userData);
+};
 
 const validateLoginData = (userData) => {
   return loginSchema.safeParse(userData);
