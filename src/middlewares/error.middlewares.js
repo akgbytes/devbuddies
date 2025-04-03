@@ -4,9 +4,8 @@ const errorHandler = (error, req, res, next) => {
   let statusCode = error.statusCode || 500;
   let message = error.message || "Something went wrong";
 
-  // Prisma-specific error handling
   if (error instanceof Prisma.PrismaClientKnownRequestError) {
-    statusCode = 400; // Bad request for known Prisma errors
+    statusCode = 400;
     message = `Database error: ${error.message}`;
   } else if (error instanceof Prisma.PrismaClientValidationError) {
     statusCode = 400;
