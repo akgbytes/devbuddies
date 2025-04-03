@@ -65,4 +65,32 @@ const registerUser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registerUser };
+const verifyUser = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+
+  if (!token) throw new CustomError("Missing verification token");
+
+  const user = await prisma.user.findFirst({
+    where: {
+      emailVerificationToken: token,
+      emailVerificationExpiry: { gt: new Date() },
+    },
+  });
+
+  if (!user) {
+    throw new CustomError("Invalid or expired token", 400);
+  }
+
+  await prisma.user.update({
+    where: { id: user.id },
+    data: {
+      emailVerificationExpiry: null,
+      emailVerificationExpiry: null,
+      isVerified: true,
+    },
+  });
+
+  res.status(200).json(new ApiResponse(200, {}, "User verified successfully"));
+});
+
+export { registerUser, verifyUser };
